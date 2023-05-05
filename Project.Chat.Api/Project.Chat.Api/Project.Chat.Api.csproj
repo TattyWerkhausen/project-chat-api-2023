@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Projeto.Chat.Application\Projeto.Chat.Application.csproj" />
+    <ProjectReference Include="..\Projeto.Chat.Core\Projeto.Chat.Core.csproj" />
+    <ProjectReference Include="..\Projeto.Chat.Domain\Projeto.Chat.Domain.csproj" />
+    <ProjectReference Include="..\Projeto.Chat.Infraestructure\Projeto.Chat.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>
