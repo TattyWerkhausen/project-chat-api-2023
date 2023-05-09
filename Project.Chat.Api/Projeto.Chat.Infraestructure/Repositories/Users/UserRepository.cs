@@ -85,5 +85,19 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
             }
             return result;
         }
+
+        public async Task<Guid> UpdateUserAsync(User user)
+        {
+            var connection = _database.ObterConnection();
+            string updateQuery = "UPDATE user SET Name = @Name, Email = @Email WHERE Id = @Id";
+
+            MySqlCommand command = new MySqlCommand(updateQuery, connection);
+            command.Parameters.AddWithValue("@Name", user.Name);
+            command.Parameters.AddWithValue("@Email", user.Email);
+            command.Parameters.AddWithValue("@Id", user.Id);
+            command.ExecuteNonQuery();
+
+            return user.Id;
+        }
     }
 }

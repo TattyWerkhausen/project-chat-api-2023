@@ -1,7 +1,8 @@
 ﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Projeto.Chat.Application.Commands.Users;
+using Projeto.Chat.Application.Commands.Users.AddUser;
+using Projeto.Chat.Application.Commands.Users.UpdateUser;
 using Projeto.Chat.Application.Queries.Users.GetUserById;
 using Projeto.Chat.Application.Queries.Users.SearchAllUsers;
 
@@ -35,6 +36,12 @@ namespace Project.Chat.Api.Controllers
         {
             var users = await _mediator.Send(new SearchAllUsersQuery(name));
             return Ok(users);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(UpdateUserCommand updateUser)
+        {
+            await _mediator.Send(updateUser);
+            return Ok();
         }
     }
 }

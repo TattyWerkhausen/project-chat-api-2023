@@ -12,9 +12,10 @@ namespace Projeto.Chat.Core.Entities.Users
             Name = name;
             Email = email;
         }
-        public void Update(string name)
+        public void Update(string name, string email)
         {
             Name = name;
+            Email = email;
         }
     }
 }

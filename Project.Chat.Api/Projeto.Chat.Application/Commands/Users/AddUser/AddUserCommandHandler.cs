@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Projeto.Chat.Core.Entities.Users.Interfaces;
 
-namespace Projeto.Chat.Application.Commands.Users
+namespace Projeto.Chat.Application.Commands.Users.AddUser
 {
     public class AddUserCommandHandler : IRequestHandler<AddUserCommand, Guid>
     {

@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
-using Projeto.Chat.Application.Commands.Users;
+using Projeto.Chat.Application.Commands.Users.AddUser;
 using Projeto.Chat.Core.Entities.Users.Interfaces;
 using Projeto.Chat.Infraestructure.DB;
 using Projeto.Chat.Infraestructure.Repositories.Users;
