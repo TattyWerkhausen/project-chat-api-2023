@@ -27,6 +27,17 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
 
             return user.Id;
         }
+        public async Task DeleteUserAsync(Guid id)
+        {
+            var connection = _database.ObterConnection();
+
+            string query = "DELETE FROM user WHERE id = @Id";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@Id", id);
+            command.ExecuteNonQuery();
+        }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync(string name = null)
         {
@@ -35,8 +46,8 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
 
             if (!string.IsNullOrEmpty(name))
             {
-                query += " WHERE Name = @name";
-                //query += "WHERE UPPER(Name) LIKE UPPER(@name)";
+              //  query += " WHERE LOWER(name) = LOWER(@Name)";
+                query += "WHERE LOWER(Name) LIKE @Name";
             }
 
 
@@ -44,7 +55,8 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
 
             if (!string.IsNullOrEmpty(name))
             {
-                command.Parameters.AddWithValue("@name", name);
+              //  command.Parameters.AddWithValue("@Name", name.ToLower());
+                command.Parameters.AddWithValue("@Name", "%" + name.ToLower() + "%");
             }
 
             MySqlDataReader reader = command.ExecuteReader();
@@ -83,6 +95,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
                 var name = reader.GetString(reader.GetOrdinal("name"));
                 result = new User(id, name, email);
             }
+            reader.Close();
             return result;
         }
 

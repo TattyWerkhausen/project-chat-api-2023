@@ -1,7 +1,9 @@
 ﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Pkix;
 using Projeto.Chat.Application.Commands.Users.AddUser;
+using Projeto.Chat.Application.Commands.Users.RemoveUser;
 using Projeto.Chat.Application.Commands.Users.UpdateUser;
 using Projeto.Chat.Application.Queries.Users.GetUserById;
 using Projeto.Chat.Application.Queries.Users.SearchAllUsers;
@@ -23,7 +25,7 @@ namespace Project.Chat.Api.Controllers
             var id = await _mediator.Send(addUserCommand);
             return Ok(id);
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var query = new GetUserByIdQuery(id);
@@ -41,6 +43,14 @@ namespace Project.Chat.Api.Controllers
         public async Task<IActionResult> UpdateUser(UpdateUserCommand updateUser)
         {
             await _mediator.Send(updateUser);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            var user = new RemoveUserCommand();
+            user.Id = id;
+            await _mediator.Send(user);
             return Ok();
         }
     }
