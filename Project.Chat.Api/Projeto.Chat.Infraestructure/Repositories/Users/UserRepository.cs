@@ -17,12 +17,13 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "INSERT INTO user (id, name, email) VALUES (@Id, @Name, @Email)";
+            string query = "INSERT INTO user (id, name, email, password) VALUES (@Id, @Name, @Email, @Password)";
             MySqlCommand command = new MySqlCommand(query, connection);
 
             command.Parameters.AddWithValue("@Id", user.Id);
             command.Parameters.AddWithValue("@Name", user.Name);
             command.Parameters.AddWithValue("@Email", user.Email);
+            command.Parameters.AddWithValue("@Password", user.Password);
             command.ExecuteNonQuery();
 
             return user.Id;
@@ -42,12 +43,11 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         public async Task<IEnumerable<User>> GetAllUsersAsync(string name = null)
         {
             var connection = _database.ObterConnection();
-            var query = "SELECT Id, Name, Email FROM user";
+            var query = "SELECT Id, Name, Email, Password FROM user";
 
             if (!string.IsNullOrEmpty(name))
             {
-              //  query += " WHERE LOWER(name) = LOWER(@Name)";
-                query += "WHERE LOWER(Name) LIKE @Name";
+                query += " WHERE LOWER(Name) LIKE @Name";
             }
 
 
@@ -55,7 +55,6 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
 
             if (!string.IsNullOrEmpty(name))
             {
-              //  command.Parameters.AddWithValue("@Name", name.ToLower());
                 command.Parameters.AddWithValue("@Name", "%" + name.ToLower() + "%");
             }
 
@@ -68,8 +67,11 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
                 var id = reader.GetGuid(reader.GetOrdinal("id"));
                 var namee = reader.GetString(reader.GetOrdinal("name"));
                 var email = reader.GetString(reader.GetOrdinal("email"));
+                var password = reader.GetString(reader.GetOrdinal("password"));
+                
+               
 
-                User user = new User(id, namee, email);
+                User user = new User(id,namee, email, password);
                 users.Add(user);
             }
 
@@ -91,9 +93,11 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
 
             if (reader.Read())
             {
-                var email = reader.GetString(reader.GetOrdinal("email"));
                 var name = reader.GetString(reader.GetOrdinal("name"));
-                result = new User(id, name, email);
+                var email = reader.GetString(reader.GetOrdinal("email"));
+                var password = reader.GetString(reader.GetOrdinal("password"));
+                
+                result = new User(id, name, email, password);
             }
             reader.Close();
             return result;
@@ -102,12 +106,13 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         public async Task<Guid> UpdateUserAsync(User user)
         {
             var connection = _database.ObterConnection();
-            string updateQuery = "UPDATE user SET Name = @Name, Email = @Email WHERE Id = @Id";
+            string updateQuery = "UPDATE user SET Name = @Name WHERE Id = @Id";
 
             MySqlCommand command = new MySqlCommand(updateQuery, connection);
-            command.Parameters.AddWithValue("@Name", user.Name);
-            command.Parameters.AddWithValue("@Email", user.Email);
             command.Parameters.AddWithValue("@Id", user.Id);
+            command.Parameters.AddWithValue("@Name", user.Name);
+          
+
             command.ExecuteNonQuery();
 
             return user.Id;

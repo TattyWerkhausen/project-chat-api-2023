@@ -7,6 +7,7 @@ namespace Projeto.Chat.Application.Commands.Users.AddUser
     {
         public string Name { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
 
         /* public AddUserCommand(string name, string email)
          {
@@ -16,7 +17,7 @@ namespace Projeto.Chat.Application.Commands.Users.AddUser
         public User ToUser()
         {
             var userId = Guid.NewGuid();
-            return new User(userId, Name, Email);
+            return new User(userId, Name, Email, Password);
         }
     }
 }

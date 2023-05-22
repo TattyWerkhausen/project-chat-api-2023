@@ -13,7 +13,7 @@ namespace Projeto.Chat.Application.Queries.Users.SearchAllUsers
         public async Task<IEnumerable<SearchAllUsersViewModel>> Handle(SearchAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAllUsersAsync(request.Name);
-            var userViewModel = users.Select(user => new SearchAllUsersViewModel(user.Id, user.Name, user.Email)).ToList(); 
+            var userViewModel = users.Select(user => new SearchAllUsersViewModel(user.Id, user.Name, user.Email, user.Password)).ToList(); 
             return userViewModel;   
         }
     }

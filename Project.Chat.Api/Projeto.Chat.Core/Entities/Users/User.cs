@@ -5,17 +5,14 @@ namespace Projeto.Chat.Core.Entities.Users
     public class User : Base
     {
         public string Name { get; private set; }
-        public string Email { get; private set; }
 
-        public User(Guid id, string name, string email) : base(id)
+        public User(Guid id, string name, string email,string password) : base(id, email, password)
         {
             Name = name;
-            Email = email;
         }
-        public void Update(string name, string email)
+        public void Update(string name)
         {
             Name = name;
-            Email = email;
         }
     }
 }

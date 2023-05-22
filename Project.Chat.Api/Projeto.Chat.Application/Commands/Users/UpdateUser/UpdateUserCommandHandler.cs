@@ -14,7 +14,7 @@ namespace Projeto.Chat.Application.Commands.Users.UpdateUser
         {
            var user = await _repository.GetUserByIdAsync(request.Id);
 
-            user.Update(request.Name, request.Email);
+            user.Update(request.Name);
             await _repository.UpdateUserAsync(user);
             
             return Unit.Value;  
