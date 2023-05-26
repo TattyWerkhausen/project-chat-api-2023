@@ -4,6 +4,7 @@
     {
         Task<Guid> AddUserAsync(User user);
         Task<User> GetUserByIdAsync(Guid id);
+        Task<User> SearchUserByNameAsync(string name);
         Task<IEnumerable<User>> GetAllUsersAsync(string name);
         Task<Guid> UpdateUserAsync(User user);
         Task DeleteUserAsync(Guid id);

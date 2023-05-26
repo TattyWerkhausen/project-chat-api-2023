@@ -6,6 +6,7 @@ using Projeto.Chat.Application.Commands.Users.AddUser;
 using Projeto.Chat.Application.Commands.Users.RemoveUser;
 using Projeto.Chat.Application.Commands.Users.UpdateUser;
 using Projeto.Chat.Application.Queries.Users.GetUserById;
+using Projeto.Chat.Application.Queries.Users.GetUserByName;
 using Projeto.Chat.Application.Queries.Users.SearchAllUsers;
 
 namespace Project.Chat.Api.Controllers
@@ -38,6 +39,13 @@ namespace Project.Chat.Api.Controllers
         {
             var users = await _mediator.Send(new SearchAllUsersQuery(name));
             return Ok(users);
+        }
+        [HttpGet("searchName/{name}")]
+        public async Task<IActionResult> SearchUserByName(string name)
+        {
+            var user = new SearchUserByNameQuery(name);
+            var viewModel = await _mediator.Send(user);
+            return Ok(viewModel);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUserCommand updateUser)

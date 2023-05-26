@@ -68,10 +68,10 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
                 var namee = reader.GetString(reader.GetOrdinal("name"));
                 var email = reader.GetString(reader.GetOrdinal("email"));
                 var password = reader.GetString(reader.GetOrdinal("password"));
-                
-               
 
-                User user = new User(id,namee, email, password);
+
+
+                User user = new User(id, namee, email, password);
                 users.Add(user);
             }
 
@@ -96,8 +96,37 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
                 var name = reader.GetString(reader.GetOrdinal("name"));
                 var email = reader.GetString(reader.GetOrdinal("email"));
                 var password = reader.GetString(reader.GetOrdinal("password"));
-                
+
                 result = new User(id, name, email, password);
+            }
+            reader.Close();
+            return result;
+        }
+
+        public async Task<User> SearchUserByNameAsync(string name)
+        {
+            var connection = _database.ObterConnection();
+
+            string query = "SELECT * FROM user WHERE LOWER(Name) LIKE @Name";
+
+            User result = null;
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            if (!string.IsNullOrEmpty(name))
+            {
+                command.Parameters.AddWithValue("@Name", "%" + name.ToLower() + "%");
+            }
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                var id = reader.GetGuid(reader.GetOrdinal("id"));
+                var namee = reader.GetString(reader.GetOrdinal("name"));
+                var email = reader.GetString(reader.GetOrdinal("email"));
+                var password = reader.GetString(reader.GetOrdinal("password"));
+
+                result = new User(id, namee, email, password);
             }
             reader.Close();
             return result;
@@ -111,7 +140,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
             MySqlCommand command = new MySqlCommand(updateQuery, connection);
             command.Parameters.AddWithValue("@Id", user.Id);
             command.Parameters.AddWithValue("@Name", user.Name);
-          
+
 
             command.ExecuteNonQuery();
 
