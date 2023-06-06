@@ -9,11 +9,6 @@ namespace Projeto.Chat.Application.Commands.Users.AddUser
         public string Email { get; set; }
         public string Password { get; set; }
 
-        /* public AddUserCommand(string name, string email)
-         {
-             Name = name;
-             Email = email;
-         }*/
         public User ToUser()
         {
             var userId = Guid.NewGuid();

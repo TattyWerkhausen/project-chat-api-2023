@@ -2,9 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Projeto.Chat.Application.Commands.Users.AddUser;
 using Projeto.Chat.Core.Entities.Logins.Interfaces;
+using Projeto.Chat.Core.Entities.Messages.Interfaces;
 using Projeto.Chat.Core.Entities.Users.Interfaces;
 using Projeto.Chat.Infraestructure.DB;
 using Projeto.Chat.Infraestructure.Repositories.Logins;
+using Projeto.Chat.Infraestructure.Repositories.Messages;
 using Projeto.Chat.Infraestructure.Repositories.Users;
 using System.Reflection;
 
@@ -18,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<Database>();
 builder.Services.AddMediatR(typeof(AddUserCommand).GetTypeInfo().Assembly);

@@ -12,7 +12,6 @@ namespace Projeto.Chat.Application.Commands.Users.AddUser
         }
         public async Task<Guid> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            //var user = new AddUserCommand(request.Name, request.Email);
             var user = request.ToUser();
             var userId = await _repository.AddUserAsync(user);
             return userId;
