@@ -2,6 +2,7 @@
 using Projeto.Chat.Core.Entities.Users;
 using Projeto.Chat.Core.Entities.Users.Interfaces;
 using Projeto.Chat.Infraestructure.DB;
+using System.Xml.Linq;
 
 namespace Projeto.Chat.Infraestructure.Repositories.Users
 {
@@ -98,6 +99,35 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
                 var password = reader.GetString(reader.GetOrdinal("password"));
 
                 result = new User(id, name, email, password);
+            }
+            reader.Close();
+            return result;
+        }
+
+        public async Task<User> SearchEmailUserAsync(string email)
+        {
+            var connection = _database.ObterConnection();
+
+            string query = "SELECT * FROM user WHERE LOWER(Email) LIKE @Email";
+
+            User result = null;
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            if (!string.IsNullOrEmpty(email))
+            {
+                command.Parameters.AddWithValue("@Email", "%" + email.ToLower() + "%");
+            }
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                var id = reader.GetGuid(reader.GetOrdinal("id"));
+                var name = reader.GetString(reader.GetOrdinal("name"));
+                var emaill = reader.GetString(reader.GetOrdinal("email"));
+                var password = reader.GetString(reader.GetOrdinal("password"));
+
+                result = new User(id, name, emaill, password);
             }
             reader.Close();
             return result;
