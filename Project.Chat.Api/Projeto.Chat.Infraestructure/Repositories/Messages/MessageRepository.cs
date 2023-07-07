@@ -1,9 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 using Projeto.Chat.Core.Entities.Messages;
 using Projeto.Chat.Core.Entities.Messages.Interfaces;
 using Projeto.Chat.Core.Entities.Users;
 using Projeto.Chat.Infraestructure.DB;
-using System.Xml.Linq;
 
 namespace Projeto.Chat.Infraestructure.Repositories.Messages
 {
@@ -15,14 +15,54 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
             _database = database;
         }
 
-        public async Task<IEnumerable<Message>> SearchAllMessages(Guid idUserSend, Guid idUserReceive)
+        public async Task<Guid> EditMessageAsync(Message message)
         {
             var connection = _database.ObterConnection();
-            var query = "SELECT * FROM message Where IdUserSend = @IdUserSend AND IdUserReceive = @IdUserReceive";
+            var query = "UPDATE message SET Content = @Content WHERE Id = @Id";
 
             MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.AddWithValue("@IdUserSend", idUserSend);
-            command.Parameters.AddWithValue("@IdUserReceive", idUserReceive);
+            command.Parameters.AddWithValue("@Content", message.Content);
+            command.Parameters.AddWithValue("@Id", message.Id);
+
+            command.ExecuteNonQuery();
+            return message.Id;
+        }
+
+        public async Task<Message> GetMessageById(Guid id)
+        {
+            var connection = _database.ObterConnection();
+            var query = "SELECT * FROM message WHERE id = @id";
+
+            Message result = null;
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                var idUserSend = reader.GetGuid(reader.GetOrdinal("idUserSend"));
+                var idUserReceive = reader.GetGuid(reader.GetOrdinal("idUserReceive"));
+                var content = reader.GetString(reader.GetOrdinal("content"));
+
+                result = new Message(id, idUserSend, idUserReceive, content);
+            }
+            reader.Close();
+            return result;
+        }
+
+        public async Task<IEnumerable<Message>> SearchAllMessages(Guid idUserLogged, Guid idUserSelected)
+        {
+            var connection = _database.ObterConnection();
+            // comparando para busca ususario que enviou e usuario qye recebeu
+            var query = "SELECT * FROM message Where (idUserSend = @idUserLogged AND idUserReceive = @idUserSelected) " +
+                // comparando para busca usuario que enviou para mim, e o que enviei para ele
+                "OR (idUserReceive = @idUserLogged AND idUserSend = @idUserSelected) ORDER BY Date ASC";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@idUserLogged", idUserLogged);
+            command.Parameters.AddWithValue("@idUserSelected", idUserSelected);
 
 
             MySqlDataReader reader = command.ExecuteReader();
@@ -34,7 +74,10 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
                 var id = reader.GetGuid(reader.GetOrdinal("id"));
                 var idUserSendd = reader.GetGuid(reader.GetOrdinal("idUserSend"));
                 var idUserReceivee = reader.GetGuid(reader.GetOrdinal("idUserReceive"));
-                var content = reader.GetString(reader.GetOrdinal("content"));
+                // var content = reader.GetString(reader.GetOrdinal("content"));
+                var contentOrdinal = reader.GetOrdinal("content");
+                var contentReader = reader.GetTextReader(contentOrdinal);
+                var content = contentReader.ReadToEnd();
 
                 Message message = new Message(id, idUserSendd, idUserReceivee, content);
                 messages.Add(message);

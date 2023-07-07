@@ -14,6 +14,7 @@ namespace Projeto.Chat.Application.Commands.Messages.SendMessage
         {
             var message = request.ToMessage();
             var messageId = await _messageRepository.SendMessage(message);
+           
             return messageId;
         }
     }

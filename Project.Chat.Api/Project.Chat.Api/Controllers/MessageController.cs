@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Chat.Application.Commands.Messages.SendMessage;
+using Projeto.Chat.Application.Commands.Messages.UpdateMessage;
+using Projeto.Chat.Application.Queries.Messages.SearchAllMessages;
 
 namespace Project.Chat.Api.Controllers
 {
@@ -19,6 +21,18 @@ namespace Project.Chat.Api.Controllers
         {
             var messageId = await _mediator.Send(sendMessage);
             return Ok(messageId);
+        }
+        [HttpGet("{idUserSend}/{idUserReceive}")]
+        public async Task<IActionResult> AllMessages(Guid idUserSend, Guid idUserReceive)
+        {
+            var messages = await _mediator.Send(new SearchAllMessagesQuery(idUserSend, idUserReceive));
+            return Ok(messages);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateMessage(UpdateMessageCommand updateMessage)
+        {
+            await _mediator.Send(updateMessage);
+            return Ok();
         }
     }
 }

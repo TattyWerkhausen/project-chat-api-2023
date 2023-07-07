@@ -6,5 +6,7 @@ namespace Projeto.Chat.Core.Entities.Messages.Interfaces
     {
         Task<IEnumerable<Message>> SearchAllMessages(Guid idUserSend, Guid idUserReceive);
         Task<Guid> SendMessage(Message message);  
+        Task<Guid> EditMessageAsync(Message message); 
+        Task<Message> GetMessageById(Guid id);
     }
 }
