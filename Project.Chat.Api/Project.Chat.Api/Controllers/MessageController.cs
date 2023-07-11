@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Chat.Application.Commands.Messages.RemoveMessage;
 using Projeto.Chat.Application.Commands.Messages.SendMessage;
 using Projeto.Chat.Application.Commands.Messages.UpdateMessage;
+using Projeto.Chat.Application.Commands.Users.RemoveUser;
+using Projeto.Chat.Application.Queries.Messages.GetMessageById;
 using Projeto.Chat.Application.Queries.Messages.SearchAllMessages;
 
 namespace Project.Chat.Api.Controllers
@@ -32,6 +35,21 @@ namespace Project.Chat.Api.Controllers
         public async Task<IActionResult> UpdateMessage(UpdateMessageCommand updateMessage)
         {
             await _mediator.Send(updateMessage);
+            return Ok();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMessageById(Guid id)
+        {
+            var query = new GetMessageByIdQuery(id);
+            var viewModel = await _mediator.Send(query);    
+            return Ok(viewModel);   
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage(Guid id)
+        {
+            var message = new RemoveMessageCommand();
+            message.Id = id;
+            await _mediator.Send(message);
             return Ok();
         }
     }

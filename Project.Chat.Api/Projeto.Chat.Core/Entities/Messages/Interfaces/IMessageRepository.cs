@@ -1,6 +1,4 @@
-﻿using Projeto.Chat.Core.Entities.Users;
-
-namespace Projeto.Chat.Core.Entities.Messages.Interfaces
+﻿namespace Projeto.Chat.Core.Entities.Messages.Interfaces
 {
     public interface IMessageRepository
     {
@@ -8,5 +6,6 @@ namespace Projeto.Chat.Core.Entities.Messages.Interfaces
         Task<Guid> SendMessage(Message message);  
         Task<Guid> EditMessageAsync(Message message); 
         Task<Message> GetMessageById(Guid id);
+        Task DeleteMessageAsync (Guid id);
     }
 }

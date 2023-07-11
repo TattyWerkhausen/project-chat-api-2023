@@ -15,6 +15,18 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
             _database = database;
         }
 
+        public async Task DeleteMessageAsync(Guid id)
+        {
+            var connection = _database.ObterConnection();
+
+            string query = "DELETE FROM message WHERE id = @Id";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@Id", id);
+            command.ExecuteNonQuery();
+        }
+
         public async Task<Guid> EditMessageAsync(Message message)
         {
             var connection = _database.ObterConnection();
