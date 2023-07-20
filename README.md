@@ -1,5 +1,6 @@
 # projeto chat backend 2023
 Projeto de um chat, com funcionalidades de:
+
 Users:
 * Register users
 * Edit users
@@ -7,6 +8,7 @@ Users:
 * See users
 * Login
 * Logout
+* 
 
   Messages:
   * Send messages
