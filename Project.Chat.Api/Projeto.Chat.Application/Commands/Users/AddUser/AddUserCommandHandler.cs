@@ -23,14 +23,14 @@ namespace Projeto.Chat.Application.Commands.Users.AddUser
 
         private async Task ValidationUser(User currentUser)
         {
-            var user = await _repository.SearchEmailUserAsync(currentUser.Email);
-            if (user.Email == user.Email)
+            var existentUser = await _repository.SearchEmailUserAsync(currentUser.Email);
+            if (existentUser != null)
             {
                 throw new Exception("ja tem um usuario com esse email");
             }
-            var userName = user.Name == null;
-            var userEmail = user.Email == null;
-            var userPassword = user.Password == null;
+            var userName = currentUser.Name == null;
+            var userEmail = currentUser.Email == null;
+            var userPassword = currentUser.Password == null;
             if (userName || userEmail || userPassword)
             {
                 throw new Exception("Dados invalidos, por favor preencha os dados para cadastro!");
