@@ -14,5 +14,6 @@ Users:
   * Send messages
   * Edit messages
   * Delete messages
+  
  
-    Notifications
+    Notifications:
