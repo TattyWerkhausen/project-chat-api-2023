@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Chat.Application.Commands.Notifications.CreateNotification;
+using Projeto.Chat.Application.Queries.Notifications.GetAllNotificationsUserLogged;
 
 namespace Project.Chat.Api.Controllers
 {
@@ -18,6 +19,13 @@ namespace Project.Chat.Api.Controllers
         {
             var notificationId = await _mediator.Send(createNotification);
             return Ok(notificationId);
+        }
+        [HttpGet]
+        public async Task<IActionResult> SearchAllNotifications(Guid idUserSend)
+        {
+            //gerando uma consulta
+            var notifications = await _mediator.Send(new GetAllNotificationsUserLoggedQuery(idUserSend));
+            return Ok(notifications);
         }
     }
 }

@@ -9,19 +9,20 @@ namespace Projeto.Chat.Application.Commands.Messages.SendMessage
     {
         private readonly IMessageRepository _messageRepository;
         private readonly INotificationRepository _notificationRepository;
-        private readonly CreateNotificationCommand _createNotificationCommand;
-        public SendMessageCommandHandler(IMessageRepository messageRepository, INotificationRepository notificationRepository, CreateNotificationCommand createNotificationCommand)
+        private readonly IMediator _mediator;
+        public SendMessageCommandHandler(IMessageRepository messageRepository, INotificationRepository notificationRepository, IMediator mediator)
         {
             _messageRepository = messageRepository;
             _notificationRepository = notificationRepository;
-            _createNotificationCommand = createNotificationCommand;
+            _mediator = mediator;
         }
         public async Task<Guid> Handle(SendMessageCommand request, CancellationToken cancellationToken)
         {
             var message = request.ToMessage();
             var messageId = await _messageRepository.SendMessage(message);
-            var notification = _createNotificationCommand.ToNotification();
-            await _notificationRepository.CreateNotificationAsync(notification);
+
+            var createNotificationCommand = new CreateNotificationCommand() { IdUserReceive = request.IdUserReceive, IdUserSend = request.IdUserSend };
+            await _mediator.Send(createNotificationCommand);
 
             return messageId;
         }

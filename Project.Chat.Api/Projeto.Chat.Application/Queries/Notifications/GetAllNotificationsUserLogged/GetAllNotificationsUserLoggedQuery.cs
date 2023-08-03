@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace Projeto.Chat.Application.Queries.Notifications.GetAllNotificationsUserLogged
 {
-    internal class GetAllNotificationsUserLoggedQuery
+    public class GetAllNotificationsUserLoggedQuery:IRequest<IEnumerable<GetAllNotificationsUserLoggedViewModel>>
     {
+        public Guid IdUserSend { get; set; }
+
+        //Construtor criado para poder passar parametro na query chamada na controller
+        public GetAllNotificationsUserLoggedQuery(Guid idUserSend)
+        {
+            IdUserSend = idUserSend;
+        }
     }
 }

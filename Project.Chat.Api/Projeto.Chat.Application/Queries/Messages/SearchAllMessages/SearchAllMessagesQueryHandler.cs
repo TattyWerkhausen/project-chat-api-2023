@@ -13,8 +13,6 @@ namespace Projeto.Chat.Application.Queries.Messages.SearchAllMessages
         public async Task<IEnumerable<SearchAllMessagesViewModel>> Handle(SearchAllMessagesQuery request, CancellationToken cancellationToken)
         {
             var mensagens = await _messageRepository.SearchAllMessages(request.IdUserSend, request.IdUserReceive);
-          
-           
             var messagesViewModel = new List<SearchAllMessagesViewModel>();
             foreach (var message in mensagens)
             {

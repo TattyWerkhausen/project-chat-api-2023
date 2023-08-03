@@ -20,6 +20,7 @@ namespace Projeto.Chat.Application.Queries.Messages.SearchAllMessages
         }
         public static SearchAllMessagesViewModel NewInstanceByMessage(Message message)
         {
+            //preenchimento dos dados pedidos no construtor
             return new SearchAllMessagesViewModel(message.Id, message.IdUserSend, message.IdUserReceive, message.Content, message.Date);
         }
     }
