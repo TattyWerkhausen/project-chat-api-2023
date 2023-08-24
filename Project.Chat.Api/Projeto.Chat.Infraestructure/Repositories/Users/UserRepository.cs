@@ -1,8 +1,7 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Projeto.Chat.Core.Entities.Users;
 using Projeto.Chat.Core.Entities.Users.Interfaces;
 using Projeto.Chat.Infraestructure.DB;
-using System.Xml.Linq;
 
 namespace Projeto.Chat.Infraestructure.Repositories.Users
 {
@@ -18,8 +17,8 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "INSERT INTO user (id, name, email, password) VALUES (@Id, @Name, @Email, @Password)";
-            MySqlCommand command = new MySqlCommand(query, connection);
+            string query = "INSERT INTO [user] (id, name, email, password) VALUES (@Id, @Name, @Email, @Password)";
+            SqlCommand command = new SqlCommand(query, connection);
 
             command.Parameters.AddWithValue("@Id", user.Id);
             command.Parameters.AddWithValue("@Name", user.Name);
@@ -33,9 +32,9 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "DELETE FROM user WHERE id = @Id";
+            string query = "DELETE FROM [user] WHERE id = @Id";
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
 
             command.Parameters.AddWithValue("@Id", id);
             command.ExecuteNonQuery();
@@ -44,7 +43,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         public async Task<IEnumerable<User>> GetAllUsersAsync(string name = null)
         {
             var connection = _database.ObterConnection();
-            var query = "SELECT Id, Name, Email, Password FROM user";
+            var query = "SELECT Id, Name, Email, Password FROM [user]";
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -52,14 +51,14 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
             }
 
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
 
             if (!string.IsNullOrEmpty(name))
             {
                 command.Parameters.AddWithValue("@Name", "%" + name.ToLower() + "%");
             }
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             var users = new List<User>();
 
@@ -83,14 +82,14 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "SELECT * FROM user WHERE id = @id";
+            string query = "SELECT * FROM [user] WHERE id = @id";
 
             User result = null;
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@id", id);
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
@@ -108,17 +107,17 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "SELECT * FROM user WHERE LOWER(Email) LIKE @Email";
+            string query = "SELECT * FROM [user] WHERE LOWER(Email) LIKE @Email";
 
             User result = null;
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             if (!string.IsNullOrEmpty(email))
             {
                 command.Parameters.AddWithValue("@Email", "%" + email.ToLower() + "%");
             }
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
@@ -137,17 +136,17 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         {
             var connection = _database.ObterConnection();
 
-            string query = "SELECT * FROM user WHERE LOWER(Name) LIKE @Name";
+            string query = "SELECT * FROM [user] WHERE LOWER(Name) LIKE @Name";
 
             User result = null;
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             if (!string.IsNullOrEmpty(name))
             {
                 command.Parameters.AddWithValue("@Name", "%" + name.ToLower() + "%");
             }
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
@@ -165,9 +164,9 @@ namespace Projeto.Chat.Infraestructure.Repositories.Users
         public async Task<Guid> UpdateUserAsync(User user)
         {
             var connection = _database.ObterConnection();
-            string updateQuery = "UPDATE user SET Name = @Name WHERE Id = @Id";
+            string updateQuery = "UPDATE [user] SET Name = @Name WHERE Id = @Id";
 
-            MySqlCommand command = new MySqlCommand(updateQuery, connection);
+            SqlCommand command = new SqlCommand(updateQuery, connection);
             command.Parameters.AddWithValue("@Id", user.Id);
             command.Parameters.AddWithValue("@Name", user.Name);
 

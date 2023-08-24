@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using Projeto.Chat.Core.Entities.Messages;
+﻿using Microsoft.Data.SqlClient;
 using Projeto.Chat.Core.Entities.Notifications;
 using Projeto.Chat.Core.Entities.Notifications.Interface;
 using Projeto.Chat.Infraestructure.DB;
@@ -20,7 +19,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Notifications
             var connection = _database.ObterConnection();
 
             var query = "INSERT INTO notification (id, idUserSend, idUserReceive, date, status) VALUES (@Id, @IdUserSend, @IdUserReceive, @Date, @Status)";
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
 
             command.Parameters.AddWithValue("@Id", notification.Id);
             command.Parameters.AddWithValue("@IdUserSend", notification.IdUserSend);
@@ -38,10 +37,10 @@ namespace Projeto.Chat.Infraestructure.Repositories.Notifications
 
             var query = "SELECT * FROM notification where idUserSend = @idUserLogged";
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@idUserLogged", idUserLogged);
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             var notifications = new List<Notification>();
 

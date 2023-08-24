@@ -1,8 +1,6 @@
-﻿using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
+﻿using Microsoft.Data.SqlClient;
 using Projeto.Chat.Core.Entities.Messages;
 using Projeto.Chat.Core.Entities.Messages.Interfaces;
-using Projeto.Chat.Core.Entities.Users;
 using Projeto.Chat.Infraestructure.DB;
 
 namespace Projeto.Chat.Infraestructure.Repositories.Messages
@@ -21,7 +19,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
 
             string query = "DELETE FROM message WHERE id = @Id";
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
 
             command.Parameters.AddWithValue("@Id", id);
             command.ExecuteNonQuery();
@@ -32,7 +30,7 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
             var connection = _database.ObterConnection();
             var query = "UPDATE message SET Content = @Content WHERE Id = @Id";
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@Content", message.Content);
             command.Parameters.AddWithValue("@Id", message.Id);
 
@@ -47,10 +45,10 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
 
             Message result = null;
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@id", id);
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
@@ -72,12 +70,12 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
                 // comparando para busca usuario que enviou para mim, e o que enviei para ele
                 "OR (idUserReceive = @idUserLogged AND idUserSend = @idUserSelected) ORDER BY Date ASC";
 
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@idUserLogged", idUserLogged);
             command.Parameters.AddWithValue("@idUserSelected", idUserSelected);
 
 
-            MySqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
 
             var messages = new List<Message>();
 
@@ -103,9 +101,9 @@ namespace Projeto.Chat.Infraestructure.Repositories.Messages
             var connection = _database.ObterConnection();
 
             var query = "INSERT INTO message (id, idUserSend, idUserReceive, content, date) VALUES (@Id, @IdUserSend, @IdUserReceive, @Content, @Date)";
-            MySqlCommand command = new MySqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
 
-            command.Parameters.AddWithValue("@Id", message.Id);
+            command.Parameters.AddWithValue("@Id", message.Id.ToByteArray());
             command.Parameters.AddWithValue("@IdUserSend", message.IdUserSend);
             command.Parameters.AddWithValue("@IdUserReceive", message.IdUserReceive);
             command.Parameters.AddWithValue("@Content", message.Content);

@@ -1,19 +1,20 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace Projeto.Chat.Infraestructure.DB
 {
     public class Database : IDisposable
     {
-        private readonly MySqlConnection _connection;
+        private readonly SqlConnection _connection;
 
         public Database()
         {
-            string connectionString = "server=localhost;database=projeto_chat;uid=root;pwd=132025;";
-            _connection = new MySqlConnection(connectionString);
+            string connectionString = "Server=DESKTOP-E462BBA\\SQLEXPRESS;Database=chat2023;Integrated Security=true;TrustServerCertificate=True";
+            _connection = new SqlConnection(connectionString);
             _connection.Open();
         }
 
-        public MySqlConnection ObterConnection()
+        public SqlConnection ObterConnection()
         {
 
             return _connection;

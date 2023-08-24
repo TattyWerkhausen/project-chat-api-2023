@@ -40,7 +40,7 @@ namespace Project.Chat.Api.Controllers
             var users = await _mediator.Send(new SearchAllUsersQuery(name));
             return Ok(users);
         }
-        [HttpGet("searchName/{name}")]
+        [HttpGet("searchName")]
         public async Task<IActionResult> SearchUserByName(string name)
         {
             var user = new SearchUserByNameQuery(name);
